@@ -5,20 +5,10 @@
  * and allows the user to filter and sort them.
  *
  *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries.
- *  2. Create a Type or Interface for the necessary data.
- *  3. Display the countries in a table with the following columns:
- *    - Flag
- *    - Name
- *    - Population
- *    - Area
- *    - Number of borders
- *  4. Implement the filters and sorting logic for:
- *    - Search by country name
- *    - Minimum number of borders
- *    - Order by Name, Population, Area, Number of borders
- *    - Order direction Ascending, Descending
- *  5. Allow the user to remove a country from the list.
- *  Ask about further improvements + testing
+ *  2. Load the data on mount
+ *  3. Sort the data by the country common name
+ *  4. Add an empty array for property "borders" for the countries which are missing it.
+ *  5. Fix the errors on the code.
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -48,10 +38,8 @@ function App() {
 
   useEffect(() => {
     const loadCountries = async () => {
-      // fetch countries data on mount
       const response = await fetch("https://restcountries.com/v3.1/all");
       const responseJson: Country[] = await response.json();
-      // add borders field to countries that don't have it
       setCountries(
         responseJson
           .sort((a, b) => a.name.common.localeCompare(b.name.common))
@@ -106,12 +94,12 @@ function App() {
         <h1>World Countries</h1>
       </div>
 
-      <div className="filter">
-        <p>Search</p>
+      <div className="filter_sorter">
+        <p>Name search</p>
         <input value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      <div className="filter">
+      <div className="filter_sorter">
         <p>Minimum no. of borders</p>
         <div className="border_filter">
           <button className="round-button" disabled={noOfBorders === 0} onClick={() => setNoOfBorders((b) => b - 1)}>
@@ -124,7 +112,7 @@ function App() {
         </div>
       </div>
 
-      <div className="filter">
+      <div className="filter_sorter">
         <p>Order by</p>
         <label htmlFor="name">
           <input
@@ -175,7 +163,7 @@ function App() {
         </label>
       </div>
 
-      <div className="filter">
+      <div className="filter_sorter">
         <p>Order direction</p>
         <label htmlFor="asc">
           <input
@@ -184,7 +172,7 @@ function App() {
             value="asc"
             id="asc"
             checked={orderDirection === "asc"}
-            onChange={(e) => setOrderDirection(e.target.value === "asc" ? "asc" : "desc")}
+            onChange={(e) => setOrderDirection("asc")}
           />
           Ascending
         </label>
@@ -196,7 +184,7 @@ function App() {
             value="desc"
             id="desc"
             checked={orderDirection === "desc"}
-            onChange={(e) => setOrderDirection(e.target.value === "asc" ? "asc" : "desc")}
+            onChange={() => setOrderDirection("desc")}
           />
           Descending
         </label>
@@ -205,7 +193,7 @@ function App() {
       <table className="countries">
         <thead>
           <tr>
-            <th style={{ width: 70, textAlign: "center" }}>Flag</th>
+            <th className="flag_head">Flag</th>
             <th>Name</th>
             <th>Population</th>
             <th>Area (km²)</th>

@@ -17,7 +17,7 @@
   }
 }
 
-.filter {
+.filter_sorter {
   margin-bottom: 20px;
 
   button {
@@ -33,6 +33,11 @@
 .countries {
   margin: 15px auto;
   width: 700px;
+
+  .flag_head {
+    width: 70px;
+    text-align: center;
+  }
 
   .flag_td {
     text-align: center !important;
