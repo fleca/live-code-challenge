@@ -7,11 +7,11 @@
  *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries.
  *  2. Load the data on mount
  *  3. Sort the data by the country common name
- *  4. Add an empty array for property "borders" for the countries which are missing it.
- *  5. Fix the errors on the implementation and the missing features.
+ *  4. Add an empty array of property "borders" for the countries which are missing it.
+ *  5. Fix the errors in the implementation and the missing features.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import trashcan from "./assets/trashcan.svg";
 import world from "./assets/world.png";
 import "./App.css";
@@ -51,7 +51,7 @@ function App() {
       <div className="filter_sorter">
         <p>Minimum no. of borders</p>
         <div className="border_filter">
-          <button className="round-button" disabled={noOfBorders === 0} onClick={() => setNoOfBorders((b) => b - 1)}>
+          <button className="round-button" onClick={() => setNoOfBorders((b) => b - 1)}>
             -
           </button>
           <p>{noOfBorders}</p>
