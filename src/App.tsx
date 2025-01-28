@@ -52,7 +52,11 @@ function App() {
       const response = await fetch("https://restcountries.com/v3.1/all");
       const responseJson: Country[] = await response.json();
       // add borders field to countries that don't have it
-      setCountries(responseJson.map((c) => ({ ...c, borders: c.borders || [] })));
+      setCountries(
+        responseJson
+          .sort((a, b) => a.name.common.localeCompare(b.name.common))
+          .map((c) => ({ ...c, borders: c.borders || [] }))
+      );
     };
 
     loadCountries();
