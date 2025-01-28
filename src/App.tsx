@@ -69,8 +69,6 @@ function App() {
             name="orderBy"
             value="name"
             id="name"
-            // checked=
-            // onChange={() => {}}
           />
           Name
         </label>
@@ -81,8 +79,6 @@ function App() {
             name="orderBy"
             value="population"
             id="population"
-            // checked=
-            // onChange={() => {}}
           />
           Population
         </label>
@@ -93,8 +89,6 @@ function App() {
             name="orderBy"
             value="area"
             id="area"
-            // checked=
-            // onChange={() => {}}
           />
           Area
         </label>
@@ -105,8 +99,6 @@ function App() {
             name="orderBy"
             value="borders"
             id="borders"
-            // checked=
-            // onChange={() => {}}
           />
           No. of borders
         </label>
@@ -151,23 +143,20 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {countries
-            .filter((c) => c.borders && c.borders.length >= noOfBorders)
-            .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()))
-            .map((country) => (
-              <tr className="country" key={country.name.common}>
-                <td style={{ width: "10%" }} className="flag_td">
-                  {country.flag && <img className="flag" alt={country.name.common} />}
-                </td>
-                <td style={{ width: "27%" }}>{country.name.common}</td>
-                <td style={{ width: "18%" }}>{country.population.currentYear}</td>
-                <td style={{ width: "18%" }}>{country.area}</td>
-                <td style={{ width: "20%" }}>{country.borders?.length}</td>
-                <td style={{ width: "7%" }}>
-                  <img className="trashcan" src={trashcan} alt="trashcan" />
-                </td>
-              </tr>
-            ))}
+          {countries.map((country) => (
+            <tr className="country" key={country.name.common}>
+              <td style={{ width: "10%" }} className="flag_td">
+                {country.flag && <img className="flag" alt={country.name.common} />}
+              </td>
+              <td style={{ width: "27%" }}>{country.name.common}</td>
+              <td style={{ width: "18%" }}>{country.population.currentYear}</td>
+              <td style={{ width: "18%" }}>{country.area}</td>
+              <td style={{ width: "20%" }}>{country.borders?.length}</td>
+              <td style={{ width: "7%" }}>
+                <img className="trashcan" src={trashcan} alt="trashcan" />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
