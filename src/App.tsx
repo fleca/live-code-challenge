@@ -79,9 +79,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const newArray = [...countries]
-      .filter((c) => c.borders && c.borders.length >= noOfBorders)
-      .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()));
+    const newArray = [...countries];
 
     if (orderBy === "name") {
       newArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
@@ -216,20 +214,23 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {countries.map((country) => (
-            <tr className="country" key={country.name.common}>
-              <td style={{ width: "10%" }} className="flag_td">
-                {country.flags.svg && <img className="flag" src={country.flags.svg} alt={country.name.common} />}
-              </td>
-              <td style={{ width: "27%" }}>{country.name.common}</td>
-              <td style={{ width: "18%" }}>{country.population}</td>
-              <td style={{ width: "18%" }}>{country.area}</td>
-              <td style={{ width: "20%" }}>{country.borders?.length}</td>
-              <td style={{ width: "7%" }}>
-                <img onClick={() => removeCountry(country)} className="trashcan" src={trashcan} alt="trashcan" />
-              </td>
-            </tr>
-          ))}
+          {countries
+            .filter((c) => c.borders && c.borders.length >= noOfBorders)
+            .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()))
+            .map((country) => (
+              <tr className="country" key={country.name.common}>
+                <td style={{ width: "10%" }} className="flag_td">
+                  {country.flags.svg && <img className="flag" src={country.flags.svg} alt={country.name.common} />}
+                </td>
+                <td style={{ width: "27%" }}>{country.name.common}</td>
+                <td style={{ width: "18%" }}>{country.population}</td>
+                <td style={{ width: "18%" }}>{country.area}</td>
+                <td style={{ width: "20%" }}>{country.borders?.length}</td>
+                <td style={{ width: "7%" }}>
+                  <img onClick={() => removeCountry(country)} className="trashcan" src={trashcan} alt="trashcan" />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </>
