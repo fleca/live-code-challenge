@@ -86,6 +86,7 @@ function App() {
     } else if (orderBy === "area") {
       newArray.sort((a, b) => a.area - b.area);
     } else {
+      newArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
       newArray.sort((a, b) => a.borders.length - b.borders.length);
     }
 
