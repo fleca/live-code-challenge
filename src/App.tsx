@@ -50,18 +50,6 @@ function App() {
     loadCountries();
   }, []);
 
-  const getSortingFunction = useCallback((a: Country, b: Country) => {
-    if (orderBy === "name") {
-      return a.name.common.localeCompare(b.name.common);
-    } else if (orderBy === "population") {
-      return a.population - b.population;
-    } else if (orderBy === "area") {
-      return a.area - b.area;
-    } else {
-      return a.borders.length - b.borders.length;
-    }
-  }, []);
-
   const removeCountry = useCallback((country: Country) => {
     setCountries((countries) => countries.filter((c) => c.name.common !== country.name.common));
   }, []);
@@ -85,7 +73,7 @@ function App() {
     }
 
     setCountries(newArray);
-  }, [noOfBorders, search, orderBy, orderDirection, getSortingFunction]);
+  }, [noOfBorders, search, orderBy, orderDirection]);
 
   return (
     <>
