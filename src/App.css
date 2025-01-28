@@ -1,0 +1,64 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.filter {
+  margin-bottom: 20px;
+
+  button {
+    margin: 0 0.5rem;
+  }
+}
+
+.border_filter {
+  display: flex;
+  justify-content: center;
+}
+
+.countries {
+  margin: 15px auto;
+  width: 700px;
+
+  .flag_td {
+    text-align: center !important;
+  }
+
+  .flag {
+    width: auto;
+    max-width: 30px;
+    height: 23px;
+    margin-top: 2px;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  .trashcan {
+    cursor: pointer;
+    width: 25px;
+  }
+}
