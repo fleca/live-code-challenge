@@ -6,7 +6,6 @@
  *
  *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries.
  *  2. Create a Type or Interface for the necessary data.
- * 
  *  3. Display the countries in a table with the following columns:
  *    - Flag
  *    - Name
@@ -24,7 +23,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import trashcan from "./assets/trashcan.svg";
-import world from './assets/world.png';
+import world from "./assets/world.png";
 import "./App.css";
 
 interface Country {
@@ -52,7 +51,6 @@ function App() {
       // fetch countries data on mount
       const response = await fetch("https://restcountries.com/v3.1/all");
       const responseJson: Country[] = await response.json();
-      console.log(responseJson);
       // add borders field to countries that don't have it
       setCountries(responseJson.map((c) => ({ ...c, borders: c.borders || [] })));
     };
@@ -75,6 +73,28 @@ function App() {
   const removeCountry = useCallback((country: Country) => {
     setCountries((countries) => countries.filter((c) => c.name.common !== country.name.common));
   }, []);
+
+  useEffect(() => {
+    const newArray = [...countries]
+      .filter((c) => c.borders && c.borders.length >= noOfBorders)
+      .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()));
+
+    if (orderBy === "name") {
+      newArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
+    } else if (orderBy === "population") {
+      newArray.sort((a, b) => a.population - b.population);
+    } else if (orderBy === "area") {
+      newArray.sort((a, b) => a.area - b.area);
+    } else {
+      newArray.sort((a, b) => a.borders.length - b.borders.length);
+    }
+
+    if (orderDirection === "desc") {
+      newArray.reverse();
+    }
+
+    setCountries(newArray);
+  }, [noOfBorders, search, orderBy, orderDirection, getSortingFunction]);
 
   return (
     <>
@@ -191,25 +211,20 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {countries
-            .filter((c) => c.borders && c.borders.length >= noOfBorders)
-            .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()))
-            .sort((a, b) => b.borders.length - a.borders.length)
-            .sort((a, b) => getSortingFunction(a, b) * (orderDirection === "asc" ? 1 : -1))
-            .map((country) => (
-              <tr className="country" key={country.name.common}>
-                <td style={{ width: "10%" }} className="flag_td">
-                  {country.flags.svg && <img className="flag" src={country.flags.svg} alt={country.name.common} />}
-                </td>
-                <td style={{ width: "27%" }}>{country.name.common}</td>
-                <td style={{ width: "18%" }}>{country.population}</td>
-                <td style={{ width: "18%" }}>{country.area}</td>
-                <td style={{ width: "20%" }}>{country.borders?.length}</td>
-                <td style={{ width: "7%" }}>
-                  <img onClick={() => removeCountry(country)} className="trashcan" src={trashcan} alt="trashcan" />
-                </td>
-              </tr>
-            ))}
+          {countries.map((country) => (
+            <tr className="country" key={country.name.common}>
+              <td style={{ width: "10%" }} className="flag_td">
+                {country.flags.svg && <img className="flag" src={country.flags.svg} alt={country.name.common} />}
+              </td>
+              <td style={{ width: "27%" }}>{country.name.common}</td>
+              <td style={{ width: "18%" }}>{country.population}</td>
+              <td style={{ width: "18%" }}>{country.area}</td>
+              <td style={{ width: "20%" }}>{country.borders?.length}</td>
+              <td style={{ width: "7%" }}>
+                <img onClick={() => removeCountry(country)} className="trashcan" src={trashcan} alt="trashcan" />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
