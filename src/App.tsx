@@ -4,8 +4,8 @@
  * The goal of this challenge is to create a simple web application that displays a list of countries
  * and allows the user to filter and sort them.
  *
- *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries.
- *  2. Load the data on mount and sort the data by the country common name.
+ *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries (/all endpoint).
+ *  2. Load the data and sort it by the country common name when the component is loaded.
  *  3. Fix the errors in the implementation and the missing features.
  */
 
@@ -64,22 +64,50 @@ function App() {
       <div className="filter_sorter">
         <p>Order by</p>
         <label htmlFor="name">
-          <input type="radio" name="orderBy" value="name" id="name" />
+          <input
+            type="radio"
+            name="orderBy"
+            value="name"
+            id="name"
+            // checked={false}
+            // onChange={() => {}}
+          />
           Name
         </label>
 
         <label htmlFor="population">
-          <input type="radio" name="orderBy" value="population" id="population" />
+          <input
+            type="radio"
+            name="orderBy"
+            value="population"
+            id="population"
+            // checked={false}
+            // onChange={() => {}}
+          />
           Population
         </label>
 
         <label htmlFor="area">
-          <input type="radio" name="orderBy" value="area" id="area" />
+          <input
+            type="radio"
+            name="orderBy"
+            value="area"
+            id="area"
+            // checked={false}
+            // onChange={() => {}}
+          />
           Area
         </label>
 
         <label htmlFor="borders">
-          <input type="radio" name="orderBy" value="borders" id="borders" />
+          <input
+            type="radio"
+            name="orderBy"
+            value="borders"
+            id="borders"
+            // checked={false}
+            // onChange={() => {}}
+          />
           No. of borders
         </label>
       </div>
