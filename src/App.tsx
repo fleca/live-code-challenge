@@ -5,10 +5,8 @@
  * and allows the user to filter and sort them.
  *
  *  1. Connect to the Rest Countries API (https://restcountries.com) to fetch the list of countries.
- *  2. Load the data on mount
- *  3. Sort the data by the country common name
- *  4. Add an empty array of property "borders" for the countries which are missing it.
- *  5. Fix the errors in the implementation and the missing features.
+ *  2. Load the data on mount and sort the data by the country common name.
+ *  3. Fix the errors in the implementation and the missing features.
  */
 
 import { useState } from "react";
@@ -18,7 +16,7 @@ import "./App.css";
 
 interface Country {
   area: number;
-  borders: string[];
+  borders?: string[];
   flag: string;
   name: {
     common: string;
