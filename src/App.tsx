@@ -17,7 +17,9 @@ import "./App.css";
 interface Country {
   area: number;
   borders?: string[];
-  flag: string;
+  flags: {
+    img: string;
+  };
   name: {
     common: string;
     official: string;
@@ -62,42 +64,22 @@ function App() {
       <div className="filter_sorter">
         <p>Order by</p>
         <label htmlFor="name">
-          <input
-            type="radio"
-            name="orderBy"
-            value="name"
-            id="name"
-          />
+          <input type="radio" name="orderBy" value="name" id="name" />
           Name
         </label>
 
         <label htmlFor="population">
-          <input
-            type="radio"
-            name="orderBy"
-            value="population"
-            id="population"
-          />
+          <input type="radio" name="orderBy" value="population" id="population" />
           Population
         </label>
 
         <label htmlFor="area">
-          <input
-            type="radio"
-            name="orderBy"
-            value="area"
-            id="area"
-          />
+          <input type="radio" name="orderBy" value="area" id="area" />
           Area
         </label>
 
         <label htmlFor="borders">
-          <input
-            type="radio"
-            name="orderBy"
-            value="borders"
-            id="borders"
-          />
+          <input type="radio" name="orderBy" value="borders" id="borders" />
           No. of borders
         </label>
       </div>
@@ -144,7 +126,7 @@ function App() {
           {countries.map((country) => (
             <tr className="country" key={country.name.common}>
               <td style={{ width: "10%" }} className="flag_td">
-                {country.flag && <img className="flag" alt={country.name.common} />}
+                {country.flags.img && <img className="flag" src={country.flags.img} alt={country.name.common} />}
               </td>
               <td style={{ width: "27%" }}>{country.name.common}</td>
               <td style={{ width: "18%" }}>{country.population.currentYear}</td>
