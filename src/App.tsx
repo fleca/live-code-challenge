@@ -9,7 +9,7 @@
  *  3. Fix the errors in the implementation and the missing features.
  */
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import trashcan from "./assets/trashcan.svg";
 import world from "./assets/world.png";
 import "./App.css";
@@ -18,15 +18,13 @@ interface Country {
   area: number;
   borders?: string[];
   flags: {
-    img: string;
+    svg: string;
   };
   name: {
     common: string;
     official: string;
   };
-  population: {
-    currentYear: number;
-  };
+  population: number;
 }
 
 function App() {
@@ -35,6 +33,41 @@ function App() {
   const [orderBy, setOrderBy] = useState<"name" | "population" | "area" | "borders">("name");
   const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
   const [countries, setCountries] = useState<Country[]>([]);
+
+  useEffect(() => {
+    const loadCountries = async () => {
+      const response = await fetch("https://restcountries.com/v3.1/all");
+      const responseJson: Country[] = await response.json();
+      setCountries(
+        responseJson
+          .sort((a, b) => a.name.common.localeCompare(b.name.common))
+          .map((c) => ({ ...c, borders: c.borders || [] }))
+      );
+    };
+    loadCountries();
+  }, []);
+
+  const removeCountry = useCallback((country: Country) => {
+    setCountries((countries) => countries.filter((c) => c.name.common !== country.name.common));
+  }, []);
+
+  useEffect(() => {
+    const newArray = [...countries];
+    if (orderBy === "name") {
+      newArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
+    } else if (orderBy === "population") {
+      newArray.sort((a, b) => a.population - b.population);
+    } else if (orderBy === "area") {
+      newArray.sort((a, b) => a.area - b.area);
+    } else {
+      newArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
+      newArray.sort((a, b) => (a.borders?.length ?? 0) - (b.borders?.length ?? 0));
+    }
+    if (orderDirection === "desc") {
+      newArray.reverse();
+    }
+    setCountries(newArray);
+  }, [noOfBorders, search, orderBy, orderDirection]);
 
   return (
     <>
@@ -51,7 +84,7 @@ function App() {
       <div className="filter_sorter">
         <p>Minimum no. of borders</p>
         <div className="border_filter">
-          <button className="round-button" onClick={() => setNoOfBorders((b) => b - 1)}>
+          <button className="round-button" disabled={noOfBorders === 0} onClick={() => setNoOfBorders((b) => b - 1)}>
             -
           </button>
           <p>{noOfBorders}</p>
@@ -69,8 +102,8 @@ function App() {
             name="orderBy"
             value="name"
             id="name"
-            // checked={false}
-            // onChange={() => {}}
+            checked={orderBy === "name"}
+            onChange={() => setOrderBy("name")}
           />
           Name
         </label>
@@ -81,8 +114,8 @@ function App() {
             name="orderBy"
             value="population"
             id="population"
-            // checked={false}
-            // onChange={() => {}}
+            checked={orderBy === "population"}
+            onChange={() => setOrderBy("population")}
           />
           Population
         </label>
@@ -93,8 +126,8 @@ function App() {
             name="orderBy"
             value="area"
             id="area"
-            // checked={false}
-            // onChange={() => {}}
+            checked={orderBy === "area"}
+            onChange={() => setOrderBy("area")}
           />
           Area
         </label>
@@ -105,8 +138,8 @@ function App() {
             name="orderBy"
             value="borders"
             id="borders"
-            // checked={false}
-            // onChange={() => {}}
+            checked={orderBy === "borders"}
+            onChange={() => setOrderBy("borders")}
           />
           No. of borders
         </label>
@@ -151,20 +184,23 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {countries.map((country) => (
-            <tr className="country" key={country.name.common}>
-              <td style={{ width: "10%" }} className="flag_td">
-                {country.flags.img && <img className="flag" src={country.flags.img} alt={country.name.common} />}
-              </td>
-              <td style={{ width: "27%" }}>{country.name.common}</td>
-              <td style={{ width: "18%" }}>{country.population.currentYear}</td>
-              <td style={{ width: "18%" }}>{country.area}</td>
-              <td style={{ width: "20%" }}>{country.borders?.length}</td>
-              <td style={{ width: "7%" }}>
-                <img className="trashcan" src={trashcan} alt="trashcan" />
-              </td>
-            </tr>
-          ))}
+          {countries
+            .filter((c) => c.borders && c.borders.length >= noOfBorders)
+            .filter((c) => c.name.common.toLowerCase().includes(search.toLowerCase()))
+            .map((country) => (
+              <tr className="country" key={country.name.common}>
+                <td style={{ width: "10%" }} className="flag_td">
+                  {country.flags.svg && <img className="flag" src={country.flags.svg} alt={country.name.common} />}
+                </td>
+                <td style={{ width: "27%" }}>{country.name.common}</td>
+                <td style={{ width: "18%" }}>{country.population}</td>
+                <td style={{ width: "18%" }}>{country.area}</td>
+                <td style={{ width: "20%" }}>{country.borders?.length ?? 0}</td>
+                <td style={{ width: "7%" }}>
+                  <img onClick={() => removeCountry(country)} className="trashcan" src={trashcan} alt="trashcan" />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </>
